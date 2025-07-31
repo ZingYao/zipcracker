@@ -27,8 +27,9 @@ ZipCracker 是一个基于 Wails 框架开发的跨平台压缩包密码破解�
 ### 环境要求
 
 - Go 1.24.4 或更高版本
-- Node.js 16 或更高版本
+- Node.js 16 或更高版本 (通过 nvm 管理)
 - Wails CLI
+- Xcode Command Line Tools (macOS)
 
 ### 安装依赖
 
@@ -60,17 +61,47 @@ wails build -platform darwin
 wails build -platform linux
 ```
 
+## 🛠️ VSCode 开发环境
+
+本项目包含完整的 VSCode 开发环境配置，提供更好的开发体验。
+
+### 配置文件
+
+- **`.vscode/launch.json`**: Wails 开发调试配置
+- **`.vscode/tasks.json`**: 构建和开发任务
+- **`.vscode/settings.json`**: 针对 Go 和 Wails 优化的工作区设置
+- **`.vscode/extensions.json`**: 推荐的开发扩展
+
+### 使用 VSCode
+
+1. **调试**: 按 `F5` 或使用调试面板开始调试
+2. **任务**: 使用 `Ctrl+Shift+P` → "Tasks: Run Task" 运行各种任务
+3. **扩展**: 按提示安装推荐的扩展
+
+### 环境设置
+
+确保设置以下环境变量：
+```bash
+export PATH=$PATH:/Users/zing/go/bin
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+```
+
+详细配置说明请查看 [`.vscode/README.md`](.vscode/README.md)。
+
 ## 📁 项目结构
 
 ```
 zipcracker/
-├── frontend/          # 前端代码
+├── .vscode/          # VSCode 开发环境配置
+├── frontend/         # 前端代码
 ├── build/            # 构建输出
 ├── app.go            # 应用主逻辑
 ├── main.go           # 程序入口
 ├── wails.json        # Wails 配置
 ├── go.mod            # Go 模块文件
-└── README.md         # 项目说明
+├── README.md         # 项目说明 (中文)
+└── README_EN.md      # 项目说明 (英文)
 ```
 
 ## 🎯 使用说明

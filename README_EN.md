@@ -1,6 +1,6 @@
 # ZipCracker - Archive Password Cracker
 
-中文 | [English](README_EN.md)
+[中文](README.md) | English
 
 ## 📖 Project Description
 
@@ -107,7 +107,7 @@ zipcracker/
 ## 🎯 Usage Instructions
 
 1. **Select File**: Click to select the archive file that needs password cracking
-2. **Choose Attack Mode**: 
+2. **Choose Attack Mode**:
    - Dictionary Attack: Use predefined password dictionaries
    - Brute Force: Try all possible password combinations
    - Mask Attack: Crack based on known password patterns
@@ -132,6 +132,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## ⚠️ Disclaimer
 
 This tool is intended for legitimate password recovery purposes only, such as:
+
 - Recovering forgotten archive passwords
 - Security testing with proper authorization
 

@@ -1,0 +1,32 @@
+{
+    "recommendations": [
+        "golang.go",
+        "ms-vscode.vscode-json",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "ms-vscode.vscode-js-debug",
+        "golangci.golangci-lint",
+        "zxh404.vscode-proto3",
+        "ms-vscode.vscode-css-peek",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-eslint",
+        "ms-vscode.vscode-html-css-support",
+        "ms-vscode.vscode-live-server",
+        "ms-vscode.vscode-npm-script",
+        "ms-vscode.vscode-markdown",
+        "ms-vscode.vscode-git",
+        "ms-vscode.vscode-git-graph",
+        "eamodio.gitlens",
+        "ms-vscode.vscode-docker",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-yaml",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-todo-highlight",
+        "wayou.vscode-todo-highlight",
+        "ms-vscode.vscode-icons",
+        "pkief.material-icon-theme",
+        "ms-vscode.vscode-color-picker"
+    ]
+}

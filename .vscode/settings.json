@@ -1,0 +1,65 @@
+{
+    "go.useLanguageServer": true,
+    "go.lintTool": "golangci-lint",
+    "go.lintOnSave": "package",
+    "go.vetOnSave": "package",
+    "go.buildOnSave": "package",
+    "go.testOnSave": false,
+    "go.coverOnSave": false,
+    "go.gopath": "",
+    "go.goroot": "",
+    "go.toolsManagement.autoUpdate": true,
+    "go.formatTool": "goimports",
+    "go.gocodeAutoBuild": false,
+    "go.delveConfig": {
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 1,
+            "maxStringLen": 64,
+            "maxArrayValues": 64,
+            "maxStructFields": -1
+        },
+        "apiVersion": 2,
+        "showGlobalVariables": false
+    },
+    "go.testFlags": [
+        "-v"
+    ],
+    "go.testTimeout": "30s",
+    "go.testEnvVars": {},
+    "go.testEnvFile": "${workspaceFolder}/.env",
+    "go.buildTags": "dev",
+    "go.buildFlags": [],
+    "go.installDependenciesWhenBuilding": true,
+    "files.associations": {
+        "*.go": "go",
+        "*.html": "html",
+        "*.css": "css",
+        "*.js": "javascript",
+        "*.json": "json"
+    },
+    "emmet.includeLanguages": {
+        "go": "html"
+    },
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/build": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/.git": true
+    },
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "javascript.preferences.includePackageJsonAutoImports": "on",
+    "extensions.ignoreRecommendations": false,
+    "extensions.showRecommendationsOnlyOnDemand": false
+}

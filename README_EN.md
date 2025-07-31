@@ -81,6 +81,7 @@ This project includes a complete VSCode development environment configuration fo
 ### Environment Setup
 
 Ensure the following environment variables are set:
+
 ```bash
 export PATH=$PATH:/Users/zing/go/bin
 export NVM_DIR="$HOME/.nvm"
@@ -145,4 +146,4 @@ Please do not use for illegal purposes. Users are responsible for their own usag
 
 ---
 
-⭐ If this project helps you, please give it a star! 
+⭐ If this project helps you, please give it a star!

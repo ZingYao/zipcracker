@@ -3,6 +3,8 @@
 import {config} from '../models';
 import {main} from '../models';
 
+export function ClearDictFilePath():Promise<void>;
+
 export function GetAttackModes():Promise<Array<string>>;
 
 export function GetAvailableThreadCounts():Promise<Array<number>>;
@@ -10,6 +12,8 @@ export function GetAvailableThreadCounts():Promise<Array<number>>;
 export function GetCPUInfo():Promise<config.CPUInfo>;
 
 export function GetConfigPath():Promise<string>;
+
+export function GetDictFilePath():Promise<string>;
 
 export function GetLanguage():Promise<string>;
 
@@ -22,6 +26,8 @@ export function GetThreadCount():Promise<number>;
 export function SelectDictFile():Promise<string>;
 
 export function SelectFile():Promise<string>;
+
+export function SetDictFilePath(arg1:string):Promise<void>;
 
 export function SetLanguage(arg1:string):Promise<void>;
 

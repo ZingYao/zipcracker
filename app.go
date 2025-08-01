@@ -228,7 +228,7 @@ func (a *App) ValidateArchive(filePath string) (bool, string) {
 
 // StartCracking 开始破解
 func (a *App) StartCracking(filePath string, mode string, params map[string]interface{}) CrackResult {
-	// 验证文件
+	// 验证压缩包文件
 	valid, errMsg := a.ValidateArchive(filePath)
 	if !valid {
 		return CrackResult{
@@ -237,16 +237,46 @@ func (a *App) StartCracking(filePath string, mode string, params map[string]inte
 		}
 	}
 
-	// TODO: 实现实际的密码破解逻辑
-	// 这里只是示例，实际需要根据不同的破解模式实现
-
+	// 根据破解模式进行额外的验证
 	switch mode {
 	case "dictionary":
+		// 验证字典文件
+		if dictPath, ok := params["dictPath"].(string); ok && dictPath != "" {
+			dictValid, dictErrMsg := a.ValidateDictFile(dictPath)
+			if !dictValid {
+				return CrackResult{
+					Success: false,
+					Error:   "字典文件验证失败: " + dictErrMsg,
+				}
+			}
+		} else {
+			return CrackResult{
+				Success: false,
+				Error:   "请选择字典文件",
+			}
+		}
 		return a.dictionaryAttack(filePath, params)
+		
 	case "bruteForce":
+		// 验证暴力破解参数
+		if err := a.validateBruteForceParams(params); err != nil {
+			return CrackResult{
+				Success: false,
+				Error:   "暴力破解参数验证失败: " + err.Error(),
+			}
+		}
 		return a.bruteForceAttack(filePath, params)
+		
 	case "mask":
+		// 验证掩码攻击参数
+		if err := a.validateMaskParams(params); err != nil {
+			return CrackResult{
+				Success: false,
+				Error:   "掩码攻击参数验证失败: " + err.Error(),
+			}
+		}
 		return a.maskAttack(filePath, params)
+		
 	default:
 		return CrackResult{
 			Success: false,
@@ -369,4 +399,66 @@ func (a *App) SetDictFilePath(filePath string) error {
 // ClearDictFilePath 清空字典文件路径
 func (a *App) ClearDictFilePath() error {
 	return config.UpdateDictFilePath("")
+}
+
+// validateBruteForceParams 验证暴力破解参数
+func (a *App) validateBruteForceParams(params map[string]interface{}) error {
+	// 验证最小长度
+	if minLength, ok := params["minLength"].(float64); ok {
+		if minLength < 1 || minLength > 20 {
+			return fmt.Errorf("最小长度必须在1-20之间")
+		}
+	} else {
+		return fmt.Errorf("缺少最小长度参数")
+	}
+	
+	// 验证最大长度
+	if maxLength, ok := params["maxLength"].(float64); ok {
+		if maxLength < 1 || maxLength > 20 {
+			return fmt.Errorf("最大长度必须在1-20之间")
+		}
+	} else {
+		return fmt.Errorf("缺少最大长度参数")
+	}
+	
+	// 验证字符集
+	if charset, ok := params["charset"].(string); ok {
+		if charset == "" {
+			return fmt.Errorf("字符集不能为空")
+		}
+	} else {
+		return fmt.Errorf("缺少字符集参数")
+	}
+	
+	// 验证长度范围
+	if minLength, ok := params["minLength"].(float64); ok {
+		if maxLength, ok := params["maxLength"].(float64); ok {
+			if minLength > maxLength {
+				return fmt.Errorf("最小长度不能大于最大长度")
+			}
+		}
+	}
+	
+	return nil
+}
+
+// validateMaskParams 验证掩码攻击参数
+func (a *App) validateMaskParams(params map[string]interface{}) error {
+	// 验证掩码模式
+	if maskPattern, ok := params["maskPattern"].(string); ok {
+		if maskPattern == "" {
+			return fmt.Errorf("掩码模式不能为空")
+		}
+		
+		// 验证掩码模式格式
+		for _, char := range maskPattern {
+			if char != '?' && char != 'l' && char != 'u' && char != 'd' && char != 's' && char != 'a' && char != 'b' && char != 'h' && char != 'H' {
+				return fmt.Errorf("掩码模式包含无效字符")
+			}
+		}
+	} else {
+		return fmt.Errorf("缺少掩码模式参数")
+	}
+	
+	return nil
 }

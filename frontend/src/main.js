@@ -4,8 +4,6 @@ import {
     SelectFile,
     SelectDictFile,
     StartCracking,
-    ValidateArchive,
-    ValidateDictFile,
     GetDictFilePath,
     SetDictFilePath,
     ClearDictFilePath
@@ -545,15 +543,10 @@ async function handleFileSelection(filePath) {
     const filePathText = document.getElementById('filePathText');
     filePathText.textContent = filePath;
     filePathElement.style.display = 'block';
+    document.getElementById('fileDropZone').style.display = 'none';
     
-
-    // 验证文件
-    const [valid, error] = await ValidateArchive(filePath);
-    if (valid) {
-        document.getElementById('fileInfo').innerHTML = '<span class="success">✓ 文件格式支持</span>';
-    } else {
-        document.getElementById('fileInfo').innerHTML = `<span class="error">✗ ${error}</span>`;
-    }
+    // 清空之前的验证信息
+    document.getElementById('fileInfo').innerHTML = '';
 }
 
 // 初始化拖拽功能
@@ -652,21 +645,14 @@ async function handleDrop(e, type) {
             document.getElementById('selectedDictPath').style.display = 'block';
             document.getElementById('dictDropZone').style.display = 'none';
             
-            // 验证字典文件
-            const [valid, error] = await ValidateDictFile(filePath);
-            if (valid) {
-                const dictInfo = document.getElementById('dictInfo');
-                if (dictInfo) {
-                    dictInfo.innerHTML = `<span class="success">✓ ${t('messages.dictFileValid')}</span>`;
-                }
-                // 保存字典文件路径
-                await saveDictFilePath(filePath);
-            } else {
-                const dictInfo = document.getElementById('dictInfo');
-                if (dictInfo) {
-                    dictInfo.innerHTML = `<span class="error">✗ ${error}</span>`;
-                }
+            // 清空之前的验证信息
+            const dictInfo = document.getElementById('dictInfo');
+            if (dictInfo) {
+                dictInfo.innerHTML = '';
             }
+            
+            // 保存字典文件路径
+            await saveDictFilePath(filePath);
         }
     }
 }
@@ -686,22 +672,15 @@ async function loadDictFilePath() {
     try {
         const filePath = await GetDictFilePath();
         if (filePath) {
-            // 验证文件是否仍然存在
-            const [valid, error] = await ValidateDictFile(filePath);
-            if (valid) {
-                selectedDictFile = filePath;
-                document.getElementById('dictPathText').textContent = filePath;
-                document.getElementById('selectedDictPath').style.display = 'block';
-                document.getElementById('dictDropZone').style.display = 'none';
-                
-                const dictInfo = document.getElementById('dictInfo');
-                if (dictInfo) {
-                    dictInfo.innerHTML = `<span class="success">✓ ${t('messages.dictFileValid')}</span>`;
-                }
-            } else {
-                // 文件不存在，清空配置
-                await ClearDictFilePath();
-                console.log('字典文件不存在，已清空配置');
+            selectedDictFile = filePath;
+            document.getElementById('dictPathText').textContent = filePath;
+            document.getElementById('selectedDictPath').style.display = 'block';
+            document.getElementById('dictDropZone').style.display = 'none';
+            
+            // 清空验证信息
+            const dictInfo = document.getElementById('dictInfo');
+            if (dictInfo) {
+                dictInfo.innerHTML = '';
             }
         }
     } catch (err) {
@@ -719,23 +698,14 @@ window.selectDictFile = async function() {
             document.getElementById('selectedDictPath').style.display = 'block';
             document.getElementById('dictDropZone').style.display = 'none';
             
-            // 验证字典文件
-            const [valid, error] = await ValidateDictFile(filePath);
-            if (valid) {
-                // 显示成功信息
-                const dictInfo = document.getElementById('dictInfo');
-                if (dictInfo) {
-                    dictInfo.innerHTML = `<span class="success">✓ ${t('messages.dictFileValid')}</span>`;
-                }
-                // 保存字典文件路径
-                await saveDictFilePath(filePath);
-            } else {
-                // 显示错误信息
-                const dictInfo = document.getElementById('dictInfo');
-                if (dictInfo) {
-                    dictInfo.innerHTML = `<span class="error">✗ ${error}</span>`;
-                }
+            // 清空之前的验证信息
+            const dictInfo = document.getElementById('dictInfo');
+            if (dictInfo) {
+                dictInfo.innerHTML = '';
             }
+            
+            // 保存字典文件路径
+            await saveDictFilePath(filePath);
         }
     } catch (err) {
         console.error('选择字典文件失败:', err);
@@ -748,11 +718,6 @@ window.selectDictFile = async function() {
 
 // 开始破解
 window.startCracking = async function() {
-    if (!selectedFile) {
-        alert(t('messages.selectFileFirst'));
-        return;
-    }
-    
     if (isCracking) {
         return;
     }

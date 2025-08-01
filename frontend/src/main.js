@@ -1,6 +1,5 @@
 import './style.css';
 
-import logo from './assets/images/logo-universal.png';
 import {
     SelectFile,
     ValidateArchive,
@@ -18,7 +17,6 @@ function updateUI() {
     document.querySelector('#app').innerHTML = `
         <div class="container">
             <header class="header">
-                <img id="logo" class="logo">
                 <h1>${t('title')}</h1>
                 <button class="language-toggle" onclick="toggleLanguage()">${t('language.switch')}</button>
             </header>
@@ -119,7 +117,6 @@ function updateUI() {
     `;
     
     // 重新绑定事件监听器
-    document.getElementById('logo').src = logo;
     
     // 监听破解模式变化
     document.querySelectorAll('input[name="mode"]').forEach(radio => {

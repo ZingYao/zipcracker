@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多语言测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .language-toggle {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>多语言功能测试</h1>
+    
+    <div class="test-section">
+        <h2>当前语言: <span id="currentLang">-</span></h2>
+        <button class="language-toggle" onclick="toggleLanguage()">切换语言</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试文本</h2>
+        <p><strong>标题:</strong> <span id="title">-</span></p>
+        <p><strong>文件选择:</strong> <span id="fileSelect">-</span></p>
+        <p><strong>开始破解:</strong> <span id="startCrack">-</span></p>
+        <p><strong>字典攻击:</strong> <span id="dictAttack">-</span></p>
+        <p><strong>暴力破解:</strong> <span id="bruteForce">-</span></p>
+        <p><strong>掩码攻击:</strong> <span id="maskAttack">-</span></p>
+    </div>
+    
+    <div class="test-section">
+        <h2>系统信息</h2>
+        <p><strong>浏览器语言:</strong> <span id="browserLang">-</span></p>
+        <p><strong>系统语言:</strong> <span id="systemLang">-</span></p>
+        <p><strong>存储的语言:</strong> <span id="storedLang">-</span></p>
+    </div>
+
+    <script type="module">
+        import { t, getCurrentLanguage, getSystemLanguage, toggleLanguage } from './src/i18n.js';
+        
+        // 全局函数供 HTML 调用
+        window.toggleLanguage = function() {
+            toggleLanguage();
+            updateDisplay();
+        };
+        
+        function updateDisplay() {
+            // 更新当前语言显示
+            document.getElementById('currentLang').textContent = getCurrentLanguage();
+            
+            // 更新测试文本
+            document.getElementById('title').textContent = t('title');
+            document.getElementById('fileSelect').textContent = t('fileSection.selectButton');
+            document.getElementById('startCrack').textContent = t('controlSection.start');
+            document.getElementById('dictAttack').textContent = t('modeSection.dictionary.label');
+            document.getElementById('bruteForce').textContent = t('modeSection.bruteForce.label');
+            document.getElementById('maskAttack').textContent = t('modeSection.mask.label');
+            
+            // 更新系统信息
+            document.getElementById('browserLang').textContent = navigator.language || 'unknown';
+            document.getElementById('systemLang').textContent = getSystemLanguage();
+            document.getElementById('storedLang').textContent = localStorage.getItem('language') || 'none';
+        }
+        
+        // 初始化显示
+        updateDisplay();
+    </script>
+</body>
+</html> 

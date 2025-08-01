@@ -35,6 +35,7 @@ body {
     border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
+    position: relative;
 }
 
 .header h1 {
@@ -47,6 +48,32 @@ body {
 .logo {
     height: 60px;
     margin-bottom: 10px;
+}
+
+/* 语言切换按钮 */
+.language-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.language-toggle:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.language-toggle:active {
+    transform: translateY(0);
 }
 
 /* 主内容区域 */

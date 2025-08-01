@@ -355,3 +355,18 @@ func (a *App) GetAvailableThreadCounts() []int {
 func (a *App) GetCPUInfo() config.CPUInfo {
 	return config.GetCPUInfo()
 }
+
+// GetDictFilePath 获取字典文件路径
+func (a *App) GetDictFilePath() string {
+	return config.GetDictFilePath()
+}
+
+// SetDictFilePath 设置字典文件路径
+func (a *App) SetDictFilePath(filePath string) error {
+	return config.UpdateDictFilePath(filePath)
+}
+
+// ClearDictFilePath 清空字典文件路径
+func (a *App) ClearDictFilePath() error {
+	return config.UpdateDictFilePath("")
+}

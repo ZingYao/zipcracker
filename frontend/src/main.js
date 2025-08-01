@@ -5,7 +5,10 @@ import {
     SelectDictFile,
     StartCracking,
     ValidateArchive,
-    ValidateDictFile
+    ValidateDictFile,
+    GetDictFilePath,
+    SetDictFilePath,
+    ClearDictFilePath
 } from '../wailsjs/go/main/App';
 import { t, toggleLanguage } from './i18n.js';
 import { initializeTheme, toggleTheme } from './theme.js';
@@ -118,8 +121,22 @@ function updateUI() {
                     </div>
                     <div id="dictionaryParams" class="params-group">
                         <label>${t('paramsSection.dictPath')}</label>
-                        <input type="text" id="dictPath" placeholder="${t('paramsSection.dictPlaceholder')}">
-                        <button class="btn btn-dict-select" onclick="selectDictFile()">${t('fileSection.selectDictButton')}</button>
+                        <div class="dict-drop-zone" id="dictDropZone">
+                            <div class="dict-drop-content">
+                                <div class="dict-drop-icon">📚</div>
+                                <div class="dict-drop-text">
+                                    <span class="dict-drop-title">${t('paramsSection.dictDropTitle')}</span>
+                                    <span class="dict-drop-subtitle">${t('paramsSection.dictDropSubtitle')}</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-dict-select" onclick="selectDictFile(); event.stopPropagation();">${t('fileSection.selectDictButton')}</button>
+                        </div>
+                        <div id="selectedDictPath" class="selected-dict-path" style="display: none;">
+                            <div class="dict-path-content">
+                                <span class="dict-path-icon">📄</span>
+                                <span class="dict-path-text" id="dictPathText"></span>
+                            </div>
+                        </div>
                         <div id="dictInfo" class="dict-info"></div>
                     </div>
                     <div id="bruteForceParams" class="params-group" style="display: none;">
@@ -205,6 +222,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // 异步初始化线程设置
     await initializeThreadSettings();
+    
+    // 异步加载字典文件路径
+    await loadDictFilePath();
     
     // 初始化拖拽功能
     initializeDragAndDrop();
@@ -538,9 +558,21 @@ async function handleFileSelection(filePath) {
 
 // 初始化拖拽功能
 function initializeDragAndDrop() {
+    // 初始化压缩包文件拖拽
     const dropZone = document.getElementById('fileDropZone');
-    if (!dropZone) return;
+    if (dropZone) {
+        initializeFileDropZone(dropZone, 'file');
+    }
     
+    // 初始化字典文件拖拽
+    const dictDropZone = document.getElementById('dictDropZone');
+    if (dictDropZone) {
+        initializeFileDropZone(dictDropZone, 'dict');
+    }
+}
+
+// 初始化文件拖拽区域
+function initializeFileDropZone(dropZone, type) {
     // 阻止默认拖拽行为
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropZone.addEventListener(eventName, preventDefaults, false);
@@ -549,15 +581,15 @@ function initializeDragAndDrop() {
     
     // 拖拽进入和离开时的视觉反馈
     ['dragenter', 'dragover'].forEach(eventName => {
-        dropZone.addEventListener(eventName, highlight, false);
+        dropZone.addEventListener(eventName, (e) => highlight(e, type), false);
     });
     
     ['dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, unhighlight, false);
+        dropZone.addEventListener(eventName, (e) => unhighlight(e, type), false);
     });
     
     // 处理文件拖放
-    dropZone.addEventListener('drop', handleDrop, false);
+    dropZone.addEventListener('drop', (e) => handleDrop(e, type), false);
     
     // 点击拖拽区域也可以选择文件
     dropZone.addEventListener('click', function(e) {
@@ -572,8 +604,12 @@ function initializeDragAndDrop() {
         }
         
         // 如果点击的是拖拽内容区域，则触发文件选择
-        if (e.target.closest('.file-drop-content')) {
-            selectFile();
+        if (e.target.closest('.file-drop-content') || e.target.closest('.dict-drop-content')) {
+            if (type === 'file') {
+                selectFile();
+            } else if (type === 'dict') {
+                selectDictFile();
+            }
         }
     });
 }
@@ -583,21 +619,21 @@ function preventDefaults(e) {
     e.stopPropagation();
 }
 
-function highlight(e) {
-    const dropZone = document.getElementById('fileDropZone');
+function highlight(e, type) {
+    const dropZone = type === 'file' ? document.getElementById('fileDropZone') : document.getElementById('dictDropZone');
     if (dropZone) {
         dropZone.classList.add('drag-over');
     }
 }
 
-function unhighlight(e) {
-    const dropZone = document.getElementById('fileDropZone');
+function unhighlight(e, type) {
+    const dropZone = type === 'file' ? document.getElementById('fileDropZone') : document.getElementById('dictDropZone');
     if (dropZone) {
         dropZone.classList.remove('drag-over');
     }
 }
 
-async function handleDrop(e) {
+async function handleDrop(e, type) {
     const dt = e.dataTransfer;
     const files = dt.files;
     
@@ -605,11 +641,71 @@ async function handleDrop(e) {
         const file = files[0];
         const filePath = file.path || file.name; // 在Wails环境中，file.path应该包含完整路径
         
-        // 显示文件路径
-        document.getElementById('filePath').value = filePath;
-        
-        // 处理文件选择
-        await handleFileSelection(filePath);
+        if (type === 'file') {
+            // 处理压缩包文件
+            document.getElementById('filePath').value = filePath;
+            await handleFileSelection(filePath);
+        } else if (type === 'dict') {
+            // 处理字典文件
+            selectedDictFile = filePath;
+            document.getElementById('dictPathText').textContent = filePath;
+            document.getElementById('selectedDictPath').style.display = 'block';
+            document.getElementById('dictDropZone').style.display = 'none';
+            
+            // 验证字典文件
+            const [valid, error] = await ValidateDictFile(filePath);
+            if (valid) {
+                const dictInfo = document.getElementById('dictInfo');
+                if (dictInfo) {
+                    dictInfo.innerHTML = `<span class="success">✓ ${t('messages.dictFileValid')}</span>`;
+                }
+                // 保存字典文件路径
+                await saveDictFilePath(filePath);
+            } else {
+                const dictInfo = document.getElementById('dictInfo');
+                if (dictInfo) {
+                    dictInfo.innerHTML = `<span class="error">✗ ${error}</span>`;
+                }
+            }
+        }
+    }
+}
+
+// 保存字典文件路径
+async function saveDictFilePath(filePath) {
+    try {
+        await SetDictFilePath(filePath);
+        console.log('字典文件路径已保存:', filePath);
+    } catch (err) {
+        console.error('保存字典文件路径失败:', err);
+    }
+}
+
+// 加载字典文件路径
+async function loadDictFilePath() {
+    try {
+        const filePath = await GetDictFilePath();
+        if (filePath) {
+            // 验证文件是否仍然存在
+            const [valid, error] = await ValidateDictFile(filePath);
+            if (valid) {
+                selectedDictFile = filePath;
+                document.getElementById('dictPathText').textContent = filePath;
+                document.getElementById('selectedDictPath').style.display = 'block';
+                document.getElementById('dictDropZone').style.display = 'none';
+                
+                const dictInfo = document.getElementById('dictInfo');
+                if (dictInfo) {
+                    dictInfo.innerHTML = `<span class="success">✓ ${t('messages.dictFileValid')}</span>`;
+                }
+            } else {
+                // 文件不存在，清空配置
+                await ClearDictFilePath();
+                console.log('字典文件不存在，已清空配置');
+            }
+        }
+    } catch (err) {
+        console.error('加载字典文件路径失败:', err);
     }
 }
 
@@ -619,7 +715,9 @@ window.selectDictFile = async function() {
         const filePath = await SelectDictFile();
         if (filePath) {
             selectedDictFile = filePath;
-            document.getElementById('dictPath').value = filePath;
+            document.getElementById('dictPathText').textContent = filePath;
+            document.getElementById('selectedDictPath').style.display = 'block';
+            document.getElementById('dictDropZone').style.display = 'none';
             
             // 验证字典文件
             const [valid, error] = await ValidateDictFile(filePath);
@@ -629,6 +727,8 @@ window.selectDictFile = async function() {
                 if (dictInfo) {
                     dictInfo.innerHTML = `<span class="success">✓ ${t('messages.dictFileValid')}</span>`;
                 }
+                // 保存字典文件路径
+                await saveDictFilePath(filePath);
             } else {
                 // 显示错误信息
                 const dictInfo = document.getElementById('dictInfo');
@@ -702,7 +802,7 @@ function getParams(mode) {
     
     switch(mode) {
         case 'dictionary':
-            params.dictPath = document.getElementById('dictPath').value;
+            params.dictPath = selectedDictFile;
             break;
         case 'bruteForce':
             params.minLength = parseInt(document.getElementById('minLength').value);

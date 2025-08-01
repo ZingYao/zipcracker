@@ -389,6 +389,112 @@ h3 {
     color: var(--text-tertiary);
 }
 
+/* 字典文件拖拽区域 */
+.dict-drop-zone {
+    position: relative;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: var(--bg-tertiary);
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+/* 已选择字典文件路径显示 */
+.selected-dict-path {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.selected-dict-path:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+.dict-path-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-primary);
+}
+
+.dict-path-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.dict-path-text {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    word-break: break-all;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dict-drop-zone:hover {
+    border-color: var(--primary-color);
+    background: rgba(52, 152, 219, 0.05);
+}
+
+.dict-drop-zone.drag-over {
+    border-color: var(--primary-color);
+    background: rgba(52, 152, 219, 0.1);
+    transform: scale(1.02);
+}
+
+.dict-drop-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.dict-drop-icon {
+    font-size: 48px;
+    color: var(--text-tertiary);
+    transition: color 0.3s ease;
+}
+
+.dict-drop-zone:hover .dict-drop-icon {
+    color: var(--primary-color);
+}
+
+.dict-drop-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.dict-drop-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.dict-drop-subtitle {
+    font-size: 14px;
+    color: var(--text-tertiary);
+}
+
 
 
 .file-info {
@@ -1044,15 +1150,18 @@ h3 {
         font-size: 13px;
     }
     
-    .selected-file-path {
+    .selected-file-path,
+    .selected-dict-path {
         padding: 12px 16px;
     }
     
-    .file-path-content {
+    .file-path-content,
+    .dict-path-content {
         gap: 8px;
     }
     
-    .file-path-text {
+    .file-path-text,
+    .dict-path-text {
         font-size: 12px;
         padding: 6px 8px;
     }

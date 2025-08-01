@@ -14,6 +14,7 @@ type Config struct {
 	Language     string `yaml:"language" json:"language"`
 	Theme        string `yaml:"theme" json:"theme"`
 	ThreadCount  int    `yaml:"thread_count" json:"thread_count"`
+	DictFilePath string `yaml:"dict_file_path" json:"dict_file_path"`
 	// 可以添加更多配置项
 }
 
@@ -267,4 +268,25 @@ func readCPUInfoFromSystem() int {
 	}
 	
 	return 0
+}
+
+// UpdateDictFilePath 更新字典文件路径
+func UpdateDictFilePath(filePath string) error {
+	config, err := LoadConfig()
+	if err != nil {
+		return err
+	}
+	
+	config.DictFilePath = filePath
+	return SaveConfig(config)
+}
+
+// GetDictFilePath 获取字典文件路径
+func GetDictFilePath() string {
+	config, err := LoadConfig()
+	if err != nil {
+		return ""
+	}
+	
+	return config.DictFilePath
 }

@@ -318,6 +318,7 @@ h3 {
     align-items: center;
     gap: 12px;
     color: var(--text-primary);
+    flex-wrap: wrap;
 }
 
 .file-path-icon {
@@ -338,6 +339,7 @@ h3 {
     border: 1px solid var(--border-color);
     flex: 1;
     min-width: 0;
+    max-width: calc(100% - 100px);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -424,6 +426,7 @@ h3 {
     align-items: center;
     gap: 12px;
     color: var(--text-primary);
+    flex-wrap: wrap;
 }
 
 .dict-path-icon {
@@ -444,6 +447,7 @@ h3 {
     border: 1px solid var(--border-color);
     flex: 1;
     min-width: 0;
+    max-width: calc(100% - 100px);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -948,6 +952,25 @@ h3 {
     box-shadow: 0 4px 12px var(--btn-dict-select-shadow);
 }
 
+.btn-reselect {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    font-size: 12px;
+    padding: 6px 12px;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+}
+
+.btn-reselect:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
 .btn-start-crack {
     background: var(--btn-start-crack-bg);
     color: var(--btn-start-crack-text);
@@ -1095,7 +1118,8 @@ h3 {
     }
     
     .btn-file-select,
-    .btn-dict-select {
+    .btn-dict-select,
+    .btn-reselect {
         font-size: 12px;
         padding: 10px 16px;
     }

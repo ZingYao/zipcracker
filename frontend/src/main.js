@@ -65,6 +65,7 @@ function updateUI() {
                         <div class="file-path-content">
                             <span class="file-path-icon">📄</span>
                             <span class="file-path-text" id="filePathText"></span>
+                            <button class="btn btn-reselect" onclick="reselectFile()">${t('fileSection.reselectButton')}</button>
                         </div>
                     </div>
                     <div id="fileInfo" class="file-info"></div>
@@ -133,6 +134,7 @@ function updateUI() {
                             <div class="dict-path-content">
                                 <span class="dict-path-icon">📄</span>
                                 <span class="dict-path-text" id="dictPathText"></span>
+                                <button class="btn btn-reselect" onclick="reselectDictFile()">${t('fileSection.reselectButton')}</button>
                             </div>
                         </div>
                         <div id="dictInfo" class="dict-info"></div>
@@ -515,6 +517,30 @@ function updateParamsVisibility() {
             break;
     }
 }
+
+// 重新选择文件
+window.reselectFile = async function() {
+    // 清空当前选择
+    selectedFile = '';
+    document.getElementById('selectedFilePath').style.display = 'none';
+    document.getElementById('fileDropZone').style.display = 'block';
+    document.getElementById('fileInfo').innerHTML = '';
+    
+    // 重新选择文件
+    await selectFile();
+};
+
+// 重新选择字典文件
+window.reselectDictFile = async function() {
+    // 清空当前选择
+    selectedDictFile = '';
+    document.getElementById('selectedDictPath').style.display = 'none';
+    document.getElementById('dictDropZone').style.display = 'block';
+    document.getElementById('dictInfo').innerHTML = '';
+    
+    // 重新选择字典文件
+    await selectDictFile();
+};
 
 // 选择文件
 window.selectFile = async function() {

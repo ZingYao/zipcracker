@@ -8,7 +8,8 @@ const i18n = {
             placeholder: '请选择压缩包文件...',
             selectButton: '选择文件',
             selectDictButton: '选择字典',
-            reselectButton: '重新选择'
+            reselectButton: '重新选择',
+            dropHint: '拖拽新文件到此处可重新选择'
         },
         modeSection: {
             title: '选择破解模式',
@@ -98,7 +99,8 @@ const i18n = {
             placeholder: 'Please select an archive file...',
             selectButton: 'Select File',
             selectDictButton: 'Select Dictionary',
-            reselectButton: 'Reselect'
+            reselectButton: 'Reselect',
+            dropHint: 'Drag new file here to reselect'
         },
         modeSection: {
             title: 'Choose Attack Mode',

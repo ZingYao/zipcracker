@@ -67,6 +67,7 @@ function updateUI() {
                             <span class="file-path-text" id="filePathText"></span>
                             <button class="btn btn-reselect" onclick="reselectFile()">${t('fileSection.reselectButton')}</button>
                         </div>
+                        <div class="file-drop-hint">${t('fileSection.dropHint')}</div>
                     </div>
                     <div id="fileInfo" class="file-info"></div>
                 </div>
@@ -136,6 +137,7 @@ function updateUI() {
                                 <span class="dict-path-text" id="dictPathText"></span>
                                 <button class="btn btn-reselect" onclick="reselectDictFile()">${t('fileSection.reselectButton')}</button>
                             </div>
+                            <div class="file-drop-hint">${t('fileSection.dropHint')}</div>
                         </div>
                         <div id="dictInfo" class="dict-info"></div>
                     </div>
@@ -588,6 +590,17 @@ function initializeDragAndDrop() {
     if (dictDropZone) {
         initializeFileDropZone(dictDropZone, 'dict');
     }
+    
+    // 初始化已选择文件的拖拽区域
+    const selectedFilePath = document.getElementById('selectedFilePath');
+    if (selectedFilePath) {
+        initializeFileDropZone(selectedFilePath, 'file');
+    }
+    
+    const selectedDictPath = document.getElementById('selectedDictPath');
+    if (selectedDictPath) {
+        initializeFileDropZone(selectedDictPath, 'dict');
+    }
 }
 
 // 初始化文件拖拽区域
@@ -622,8 +635,10 @@ function initializeFileDropZone(dropZone, type) {
             return;
         }
         
-        // 如果点击的是拖拽内容区域，则触发文件选择
-        if (e.target.closest('.file-drop-content') || e.target.closest('.dict-drop-content')) {
+        // 如果点击的是拖拽内容区域或文件路径区域，则触发文件选择
+        if (e.target.closest('.file-drop-content') || e.target.closest('.dict-drop-content') || 
+            e.target.closest('.file-path-content') || e.target.closest('.dict-path-content') ||
+            e.target.closest('.file-drop-hint')) {
             if (type === 'file') {
                 selectFile();
             } else if (type === 'dict') {
@@ -639,14 +654,14 @@ function preventDefaults(e) {
 }
 
 function highlight(e, type) {
-    const dropZone = type === 'file' ? document.getElementById('fileDropZone') : document.getElementById('dictDropZone');
+    const dropZone = e.currentTarget;
     if (dropZone) {
         dropZone.classList.add('drag-over');
     }
 }
 
 function unhighlight(e, type) {
-    const dropZone = type === 'file' ? document.getElementById('fileDropZone') : document.getElementById('dictDropZone');
+    const dropZone = e.currentTarget;
     if (dropZone) {
         dropZone.classList.remove('drag-over');
     }
@@ -662,7 +677,6 @@ async function handleDrop(e, type) {
         
         if (type === 'file') {
             // 处理压缩包文件
-            document.getElementById('filePath').value = filePath;
             await handleFileSelection(filePath);
         } else if (type === 'dict') {
             // 处理字典文件

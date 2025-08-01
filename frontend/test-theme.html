@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主题切换测试</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <header class="header">
+                <h1>主题切换测试</h1>
+                <button class="theme-toggle" onclick="toggleTheme()">切换主题</button>
+                <button class="language-toggle" onclick="toggleLanguage()">English</button>
+            </header>
+            
+            <main class="main">
+                <div class="file-section">
+                    <h2>测试区域</h2>
+                    <p>这是一个测试页面，用于验证主题切换功能是否正常工作。</p>
+                    <div class="file-input">
+                        <input type="text" placeholder="测试输入框" value="测试内容">
+                        <button class="btn btn-primary">测试按钮</button>
+                    </div>
+                </div>
+                
+                <div class="mode-section">
+                    <h2>模式选择</h2>
+                    <div class="mode-options">
+                        <label class="mode-option">
+                            <input type="radio" name="mode" value="test1" checked>
+                            <span class="mode-label">测试模式1</span>
+                            <span class="mode-desc">这是测试模式1的描述</span>
+                        </label>
+                        <label class="mode-option">
+                            <input type="radio" name="mode" value="test2">
+                            <span class="mode-label">测试模式2</span>
+                            <span class="mode-desc">这是测试模式2的描述</span>
+                        </label>
+                    </div>
+                </div>
+            </main>
+            
+            <footer class="footer">
+                <p>测试页面 - 主题切换功能验证</p>
+            </footer>
+        </div>
+    </div>
+
+    <script type="module">
+        import { toggleTheme, initializeTheme } from './src/theme.js';
+        import { toggleLanguage } from './src/i18n.js';
+        
+        // 暴露到全局作用域
+        window.toggleTheme = toggleTheme;
+        window.toggleLanguage = toggleLanguage;
+        
+        // 初始化主题
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializeTheme();
+            console.log('主题初始化完成');
+        });
+    </script>
+</body>
+</html> 

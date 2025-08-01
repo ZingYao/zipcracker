@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主题切换调试</title>
+    <style>
+        /* 简化的样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 140px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .test-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>主题切换调试页面</h1>
+        <button class="theme-toggle" onclick="testThemeToggle()">切换主题</button>
+        <button class="language-toggle" onclick="testLanguageToggle()">English</button>
+    </div>
+    
+    <div class="test-content">
+        <h2>测试内容</h2>
+        <p>这个页面用于调试主题切换按钮是否正常显示。</p>
+        <p>如果你能看到右上角的"切换主题"按钮，说明按钮样式正常。</p>
+        <p>点击按钮应该会在控制台输出调试信息。</p>
+    </div>
+
+    <script>
+        function testThemeToggle() {
+            console.log('主题切换按钮被点击');
+            alert('主题切换按钮正常工作！');
+        }
+        
+        function testLanguageToggle() {
+            console.log('语言切换按钮被点击');
+            alert('语言切换按钮正常工作！');
+        }
+        
+        console.log('调试页面加载完成');
+        console.log('主题切换按钮应该位于右上角');
+    </script>
+</body>
+</html> 

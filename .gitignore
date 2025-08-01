@@ -2,6 +2,7 @@
 build/
 build/bin/
 dist/
+zipcracker*
 
 # Node.js dependencies
 node_modules/

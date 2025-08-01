@@ -34,7 +34,10 @@ const i18n = {
             charsetPlaceholder: '字符集',
             maskPattern: '掩码模式:',
             maskPlaceholder: '例如: ?l?l?d?d?d',
-            maskTitle: '?l=小写字母 ?u=大写字母 ?d=数字 ?s=特殊字符'
+            maskTitle: '?l=小写字母 ?u=大写字母 ?d=数字 ?s=特殊字符',
+            threadCount: '线程数量:',
+            threadCountPlaceholder: '选择线程数量',
+            threadCountDesc: '建议使用2/3的CPU核心数'
         },
         controlSection: {
             start: '开始破解',
@@ -69,6 +72,16 @@ const i18n = {
         language: {
             name: '中文',
             switch: 'English'
+        },
+        theme: {
+            name: '主题',
+            light: '浅色',
+            dark: '深色',
+            switch: '切换主题'
+        },
+        footer: {
+            supportedFormats: '支持格式: ZIP, RAR, 7Z, TAR.GZ, TAR.BZ2',
+            disclaimer: '⚠️ 本工具仅用于合法的密码恢复目的'
         }
     },
     
@@ -106,7 +119,10 @@ const i18n = {
             charsetPlaceholder: 'Character set',
             maskPattern: 'Mask Pattern:',
             maskPlaceholder: 'e.g., ?l?l?d?d?d',
-            maskTitle: '?l=lowercase ?u=uppercase ?d=digit ?s=special'
+            maskTitle: '?l=lowercase ?u=uppercase ?d=digit ?s=special',
+            threadCount: 'Thread Count:',
+            threadCountPlaceholder: 'Select thread count',
+            threadCountDesc: 'Recommended: 2/3 of CPU cores'
         },
         controlSection: {
             start: 'Start Cracking',
@@ -141,6 +157,16 @@ const i18n = {
         language: {
             name: 'English',
             switch: '中文'
+        },
+        theme: {
+            name: 'Theme',
+            light: 'Light',
+            dark: 'Dark',
+            switch: 'Toggle Theme'
+        },
+        footer: {
+            supportedFormats: 'Supported formats: ZIP, RAR, 7Z, TAR.GZ, TAR.BZ2',
+            disclaimer: '⚠️ This tool is only for legitimate password recovery purposes'
         }
     }
 };
@@ -156,19 +182,45 @@ function getSystemLanguage() {
 }
 
 // 获取当前语言
-function getCurrentLanguage() {
+async function getCurrentLanguage() {
+    try {
+        // 优先从后端获取语言设置
+        if (window.go && window.go.main && window.go.main.App) {
+            const backendLang = await window.go.main.App.GetLanguage();
+            if (backendLang) {
+                return backendLang;
+            }
+        }
+    } catch (err) {
+        console.warn('无法从后端获取语言设置，使用本地存储:', err);
+    }
+    
+    // 回退到本地存储
     return localStorage.getItem('language') || getSystemLanguage();
 }
 
 // 设置语言
-function setLanguage(lang) {
+async function setLanguage(lang) {
+    try {
+        // 优先保存到后端
+        if (window.go && window.go.main && window.go.main.App) {
+            await window.go.main.App.SetLanguage(lang);
+        }
+    } catch (err) {
+        console.warn('无法保存语言设置到后端，使用本地存储:', err);
+    }
+    
+    // 同时保存到本地存储作为备份
     localStorage.setItem('language', lang);
-    updateUI();
+    
+    // 触发自定义事件，让 main.js 监听并更新 UI
+    window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: lang } }));
 }
 
 // 获取翻译文本
 function t(key) {
-    const lang = getCurrentLanguage();
+    // 使用同步方式获取语言，优先使用本地存储
+    const lang = localStorage.getItem('language') || getSystemLanguage();
     const keys = key.split('.');
     let value = i18n[lang];
     
@@ -192,11 +244,11 @@ function t(key) {
 }
 
 // 切换语言
-function toggleLanguage() {
-    const currentLang = getCurrentLanguage();
+async function toggleLanguage() {
+    const currentLang = await getCurrentLanguage();
     const newLang = currentLang === 'zh-CN' ? 'en-US' : 'zh-CN';
-    setLanguage(newLang);
+    await setLanguage(newLang);
 }
 
 // 导出
-export { i18n, getSystemLanguage, getCurrentLanguage, setLanguage, t, toggleLanguage }; 
+export { getCurrentLanguage, getSystemLanguage, i18n, setLanguage, t, toggleLanguage };

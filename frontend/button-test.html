@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按钮测试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            min-height: 80px;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 160px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 1000;
+            min-width: 80px;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .debug-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>按钮位置测试</h1>
+        <button class="theme-toggle" onclick="testTheme()">切换主题</button>
+        <button class="language-toggle" onclick="testLanguage()">English</button>
+    </div>
+    
+    <div class="debug-info">
+        <h3>调试信息</h3>
+        <p><strong>主题切换按钮位置:</strong> right: 160px, top: 20px</p>
+        <p><strong>语言切换按钮位置:</strong> right: 20px, top: 20px</p>
+        <p><strong>按钮间距:</strong> 140px</p>
+        <p>如果你能看到两个按钮，说明位置设置正确。</p>
+    </div>
+
+    <script>
+        function testTheme() {
+            alert('主题切换按钮正常工作！');
+        }
+        
+        function testLanguage() {
+            alert('语言切换按钮正常工作！');
+        }
+        
+        // 检查按钮是否存在
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeBtn = document.querySelector('.theme-toggle');
+            const langBtn = document.querySelector('.language-toggle');
+            
+            console.log('主题切换按钮:', themeBtn);
+            console.log('语言切换按钮:', langBtn);
+            
+            if (themeBtn) {
+                console.log('主题切换按钮可见');
+            } else {
+                console.error('主题切换按钮不存在');
+            }
+            
+            if (langBtn) {
+                console.log('语言切换按钮可见');
+            } else {
+                console.error('语言切换按钮不存在');
+            }
+        });
+    </script>
+</body>
+</html> 

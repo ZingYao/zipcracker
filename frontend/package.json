@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules/.cache",
+    "build:clean": "npm run clean && npm run build"
   },
   "devDependencies": {
     "vite": "^3.0.7"

@@ -1,3 +1,24 @@
+export namespace config {
+	
+	export class CPUInfo {
+	    physical_cores: number;
+	    logical_cores: number;
+	    has_hyperthreading: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new CPUInfo(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.physical_cores = source["physical_cores"];
+	        this.logical_cores = source["logical_cores"];
+	        this.has_hyperthreading = source["has_hyperthreading"];
+	    }
+	}
+
+}
+
 export namespace main {
 	
 	export class CrackResult {

@@ -28,33 +28,43 @@
                 "CGO_ENABLED": "1",
                 "CGO_LDFLAGS": "-framework UniformTypeIdentifiers"
             },
-            "buildFlags": ["-tags=production"],
+            "buildFlags": ["-tags=wails"],
             "args": [],
             "showLog": true,
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
         },
         {
-            "name": "Debug App.go",
+            "name": "Wails Debug",
             "type": "go",
             "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/app.go",
-            "env": {},
+            "mode": "auto",
+            "program": "${workspaceFolder}",
+            "env": {
+                "CGO_ENABLED": "1",
+                "CGO_LDFLAGS": "-framework UniformTypeIdentifiers"
+            },
+            "buildFlags": ["-tags=debug"],
             "args": [],
             "showLog": true,
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
         },
         {
-            "name": "Debug Main.go",
+            "name": "Wails All Tags",
             "type": "go",
             "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/main.go",
-            "env": {},
+            "mode": "auto",
+            "program": "${workspaceFolder}",
+            "env": {
+                "CGO_ENABLED": "1",
+                "CGO_LDFLAGS": "-framework UniformTypeIdentifiers"
+            },
+            "buildFlags": ["-tags=wails,dev,debug"],
             "args": [],
             "showLog": true,
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

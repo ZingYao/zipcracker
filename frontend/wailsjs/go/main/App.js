@@ -6,12 +6,48 @@ export function GetAttackModes() {
   return window['go']['main']['App']['GetAttackModes']();
 }
 
+export function GetAvailableThreadCounts() {
+  return window['go']['main']['App']['GetAvailableThreadCounts']();
+}
+
+export function GetCPUInfo() {
+  return window['go']['main']['App']['GetCPUInfo']();
+}
+
+export function GetConfigPath() {
+  return window['go']['main']['App']['GetConfigPath']();
+}
+
+export function GetLanguage() {
+  return window['go']['main']['App']['GetLanguage']();
+}
+
 export function GetSupportedFormats() {
   return window['go']['main']['App']['GetSupportedFormats']();
 }
 
+export function GetTheme() {
+  return window['go']['main']['App']['GetTheme']();
+}
+
+export function GetThreadCount() {
+  return window['go']['main']['App']['GetThreadCount']();
+}
+
 export function SelectFile() {
   return window['go']['main']['App']['SelectFile']();
+}
+
+export function SetLanguage(arg1) {
+  return window['go']['main']['App']['SetLanguage'](arg1);
+}
+
+export function SetTheme(arg1) {
+  return window['go']['main']['App']['SetTheme'](arg1);
+}
+
+export function SetThreadCount(arg1) {
+  return window['go']['main']['App']['SetThreadCount'](arg1);
 }
 
 export function StartCracking(arg1, arg2, arg3) {

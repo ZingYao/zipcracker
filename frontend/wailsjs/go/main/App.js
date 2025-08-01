@@ -34,6 +34,10 @@ export function GetThreadCount() {
   return window['go']['main']['App']['GetThreadCount']();
 }
 
+export function SelectDictFile() {
+  return window['go']['main']['App']['SelectDictFile']();
+}
+
 export function SelectFile() {
   return window['go']['main']['App']['SelectFile']();
 }
@@ -56,4 +60,8 @@ export function StartCracking(arg1, arg2, arg3) {
 
 export function ValidateArchive(arg1) {
   return window['go']['main']['App']['ValidateArchive'](arg1);
+}
+
+export function ValidateDictFile(arg1) {
+  return window['go']['main']['App']['ValidateDictFile'](arg1);
 }

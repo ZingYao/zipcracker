@@ -19,6 +19,8 @@ export function GetTheme():Promise<string>;
 
 export function GetThreadCount():Promise<number>;
 
+export function SelectDictFile():Promise<string>;
+
 export function SelectFile():Promise<string>;
 
 export function SetLanguage(arg1:string):Promise<void>;
@@ -30,3 +32,5 @@ export function SetThreadCount(arg1:number):Promise<void>;
 export function StartCracking(arg1:string,arg2:string,arg3:Record<string, any>):Promise<main.CrackResult>;
 
 export function ValidateArchive(arg1:string):Promise<boolean|string>;
+
+export function ValidateDictFile(arg1:string):Promise<boolean|string>;

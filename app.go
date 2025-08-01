@@ -108,6 +108,96 @@ func (a *App) SelectFile() string {
 	return filePath
 }
 
+// SelectDictFile 选择字典文件
+func (a *App) SelectDictFile() string {
+	// 检查上下文是否有效
+	if a.ctx == nil {
+		return ""
+	}
+	
+	// 根据操作系统决定是否使用过滤器
+	var options wailsruntime.OpenDialogOptions
+	
+	// 获取当前语言设置
+	language := config.GetLanguage()
+	
+	// 设置标题（支持多语言）
+	var title string
+	if language == "en-US" {
+		title = "Select Dictionary File"
+	} else {
+		title = "选择字典文件"
+	}
+	
+	// 在macOS上不使用过滤器以避免异常
+	if runtime.GOOS == "darwin" {
+		options = wailsruntime.OpenDialogOptions{
+			Title: title,
+		}
+	} else {
+		// 在其他系统上使用过滤器
+		var displayName string
+		if language == "en-US" {
+			displayName = "Dictionary Files (*.txt;*.dict;*.wordlist)"
+		} else {
+			displayName = "字典文件 (*.txt;*.dict;*.wordlist)"
+		}
+		
+		options = wailsruntime.OpenDialogOptions{
+			Title: title,
+			Filters: []wailsruntime.FileFilter{
+				{
+					DisplayName: displayName,
+					Pattern:     "*.txt;*.dict;*.wordlist",
+				},
+			},
+		}
+	}
+	
+	filePath, err := wailsruntime.OpenFileDialog(a.ctx, options)
+	
+	if err != nil {
+		// 记录错误但不崩溃
+		wailsruntime.LogError(a.ctx, "字典文件选择对话框错误: "+err.Error())
+		return ""
+	}
+	
+	// 记录选择的文件路径
+	if filePath != "" {
+		wailsruntime.LogInfo(a.ctx, "选择的字典文件: "+filePath)
+	}
+	
+	return filePath
+}
+
+// ValidateDictFile 验证字典文件
+func (a *App) ValidateDictFile(filePath string) (bool, string) {
+	fmt.Println("validate dict file", filePath)
+	if filePath == "" {
+		fmt.Println("validate dict file - empty path")
+		return false, "请选择字典文件"
+	}
+
+	// 检查文件是否存在
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		fmt.Println("dict file not exist", filePath)
+		return false, "字典文件不存在"
+	}
+
+	// 检查文件扩展名
+	supportedFormats := []string{".txt", ".dict", ".wordlist"}
+
+	for _, format := range supportedFormats {
+		if strings.HasSuffix(strings.ToLower(filePath), format) {
+			fmt.Println("dict file format supported", filePath)
+			return true, ""
+		}
+	}
+
+	fmt.Println("dict file format not supported", filePath)
+	return false, "不支持的字典文件格式"
+}
+
 // ValidateArchive 验证压缩包文件
 func (a *App) ValidateArchive(filePath string) (bool, string) {
 	fmt.Println("validate archive",filePath)

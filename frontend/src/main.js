@@ -2,8 +2,10 @@ import './style.css';
 console.log('main.js loaded');
 import {
     SelectFile,
+    SelectDictFile,
     StartCracking,
-    ValidateArchive
+    ValidateArchive,
+    ValidateDictFile
 } from '../wailsjs/go/main/App';
 import { t, toggleLanguage } from './i18n.js';
 import { initializeTheme, toggleTheme } from './theme.js';
@@ -12,6 +14,7 @@ import { initializeTheme, toggleTheme } from './theme.js';
 let dropZoneClickDebounce = false;
 // 全局变量
 let selectedFile = '';
+let selectedDictFile = '';
 let isCracking = false;
 let availableThreadCounts = [];
 let currentThreadCount = 2;
@@ -117,6 +120,7 @@ function updateUI() {
                         <label>${t('paramsSection.dictPath')}</label>
                         <input type="text" id="dictPath" placeholder="${t('paramsSection.dictPlaceholder')}">
                         <button class="btn btn-dict-select" onclick="selectDictFile()">${t('fileSection.selectDictButton')}</button>
+                        <div id="dictInfo" class="dict-info"></div>
                     </div>
                     <div id="bruteForceParams" class="params-group" style="display: none;">
                         <div class="param-row">
@@ -610,9 +614,36 @@ async function handleDrop(e) {
 }
 
 // 选择字典文件
-window.selectDictFile = function() {
-    // TODO: 实现字典文件选择
-    alert('字典文件选择功能待实现');
+window.selectDictFile = async function() {
+    try {
+        const filePath = await SelectDictFile();
+        if (filePath) {
+            selectedDictFile = filePath;
+            document.getElementById('dictPath').value = filePath;
+            
+            // 验证字典文件
+            const [valid, error] = await ValidateDictFile(filePath);
+            if (valid) {
+                // 显示成功信息
+                const dictInfo = document.getElementById('dictInfo');
+                if (dictInfo) {
+                    dictInfo.innerHTML = `<span class="success">✓ ${t('messages.dictFileValid')}</span>`;
+                }
+            } else {
+                // 显示错误信息
+                const dictInfo = document.getElementById('dictInfo');
+                if (dictInfo) {
+                    dictInfo.innerHTML = `<span class="error">✗ ${error}</span>`;
+                }
+            }
+        }
+    } catch (err) {
+        console.error('选择字典文件失败:', err);
+        const dictInfo = document.getElementById('dictInfo');
+        if (dictInfo) {
+            dictInfo.innerHTML = `<span class="error">✗ ${t('messages.dictFileSelectError')}</span>`;
+        }
+    }
 };
 
 // 开始破解

@@ -67,7 +67,9 @@ const i18n = {
             crackingInProgress: '正在破解中...',
             crackingStopped: '破解已停止',
             noPasswordFound: '未找到密码',
-            unknownError: '未知错误'
+            unknownError: '未知错误',
+            dictFileValid: '字典文件有效',
+            dictFileSelectError: '选择字典文件失败'
         },
         language: {
             name: '中文',
@@ -152,7 +154,9 @@ const i18n = {
             crackingInProgress: 'Cracking in progress...',
             crackingStopped: 'Cracking stopped',
             noPasswordFound: 'No password found',
-            unknownError: 'Unknown error'
+            unknownError: 'Unknown error',
+            dictFileValid: 'Dictionary file is valid',
+            dictFileSelectError: 'Failed to select dictionary file'
         },
         language: {
             name: 'English',

@@ -1,6 +1,6 @@
 # ZipCracker - Archive Password Cracker
 
-[中文](README.md) | English
+English | [中文](README.md)
 
 ## 📖 Project Description
 
